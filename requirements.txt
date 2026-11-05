@@ -1,0 +1,7 @@
+# CPU 参考流水线的最小依赖
+numpy>=1.23
+
+# 可选：
+#   matplotlib>=3.6        谱图 PNG 渲染（多模态图像通道）
+#   torch / transformers / trl / peft / datasets / accelerate
+#                           真实多模态基座 LoRA-SFT，见 pyproject.toml 的 [train] extra

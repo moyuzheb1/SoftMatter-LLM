@@ -1,0 +1,123 @@
+{
+  "dataset": {
+    "n_samples": 2400,
+    "seed": 7,
+    "q_min": 0.03,
+    "q_max": 3.0,
+    "n_points": 180,
+    "noise": 0.035,
+    "hardcase_fraction": 0.22,
+    "regime_weights": {
+      "ordered": 0.50,
+      "disordered": 0.32,
+      "critical": 0.18
+    },
+    "with_rheology": true
+  },
+  "cleaning": {
+    "min_points": 80,
+    "q_min": 0.02,
+    "q_max": 3.2,
+    "despike": true,
+    "spike_threshold": 6.0,
+    "subtract_background": false,
+    "normalize": true,
+    "porod_n_min": 0.8,
+    "porod_n_max": 5.0,
+    "snr_min": 2.0
+  },
+  "mixture": {
+    "regime_target": {
+      "ordered": 0.45,
+      "disordered": 0.35,
+      "critical": 0.20
+    },
+    "phase_target": {
+      "lamellar": 0.34,
+      "cylindrical": 0.33,
+      "gyroid": 0.33
+    },
+    "porod_ordered_range": [3.6, 4.4],
+    "max_samples": 2000,
+    "seed": 11
+  },
+  "cot": {
+    "language": "zh",
+    "include_answer": true,
+    "max_curve_points": 64
+  },
+  "sft": {
+    "demo_scale": 0.001,
+    "epochs": 10,
+    "batch_size": 64,
+    "eval_size": 300,
+    "calibration_shrink": 0.25,
+    "seed": 23,
+    "stages": [
+      {
+        "name": "physics_concepts",
+        "num_samples": 100000,
+        "feature_level": 1,
+        "lr": 0.05,
+        "description": "基础物理概念：Guinier/Porod/Ornstein-Zernike 区间识别"
+      },
+      {
+        "name": "curve_fitting",
+        "num_samples": 500000,
+        "feature_level": 2,
+        "lr": 0.08,
+        "description": "标准曲线拟合：峰位、幂律指数、相关长度的数值回归"
+      },
+      {
+        "name": "complex_reasoning",
+        "num_samples": 1440000,
+        "feature_level": 3,
+        "lr": 0.10,
+        "description": "复杂体系推理：CoT 峰比匹配、临界涨落与 hardcase 判别"
+      }
+    ]
+  },
+  "reward": {
+    "weights": {
+      "format": 0.05,
+      "phase": 0.20,
+      "parameter": 0.55,
+      "consistency": 0.20
+    },
+    "tolerances": {
+      "xi": 0.15,
+      "n": 0.25,
+      "q_star": 0.15
+    }
+  },
+  "dapo": {
+    "group_size": 8,
+    "steps": 80,
+    "batch_samples": 6,
+    "lr": 0.02,
+    "eps_low": 0.20,
+    "eps_high": 0.28,
+    "inner_epochs": 2,
+    "dynamic_sampling": true,
+    "token_level": true,
+    "overlong_penalty": true,
+    "max_tokens": 512,
+    "hardcase_boost": 2.0,
+    "seed": 3
+  },
+  "eval": {
+    "xi_rtol": 0.15,
+    "n_atol": 0.25,
+    "q_rtol": 0.15,
+    "chi_bins": 8,
+    "f_bins": 7
+  },
+  "llm": {
+    "base_model": "Qwen/Qwen2.5-VL-7B-Instruct",
+    "max_length": 2048,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "backend": "auto"
+  }
+}
